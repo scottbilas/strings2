@@ -17,6 +17,7 @@ struct MBI_BASIC_INFO
 	unsigned __int64 base;
 	unsigned __int64 end;
 	DWORD protect;
+	DWORD type;
 	bool valid;
 	bool executable;
 	unsigned __int64 size;

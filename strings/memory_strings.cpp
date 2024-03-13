@@ -87,6 +87,7 @@ MBI_BASIC_INFO memory_strings::_get_mbi_info(unsigned __int64 address, HANDLE ph
 	result.base = 0;
 	result.end = 0;
 	result.protect = 0;
+	result.type = 0;
 	result.valid = false;
 	result.executable = false;
 
@@ -98,6 +99,7 @@ MBI_BASIC_INFO memory_strings::_get_mbi_info(unsigned __int64 address, HANDLE ph
 		result.base = mbi.BaseAddress;
 		result.end = mbi.BaseAddress + mbi.RegionSize;
 		result.protect = mbi.Protect;
+		result.type = mbi.Type;
 		result.valid = mbi.State != MEM_FREE && !(mbi.Protect & (PAGE_NOACCESS | PAGE_GUARD));
 		result.executable = (mbi.Protect & (PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY)) > 0;
 		result.size = mbi.RegionSize;
@@ -109,6 +111,7 @@ MBI_BASIC_INFO memory_strings::_get_mbi_info(unsigned __int64 address, HANDLE ph
 		result.base = mbi32->BaseAddress;
 		result.end = (long long) mbi32->BaseAddress + (long long)mbi32->RegionSize;
 		result.protect = mbi32->Protect;
+		result.type = mbi32->Type;
 		result.valid = mbi32->State != MEM_FREE && !(mbi32->Protect & (PAGE_NOACCESS | PAGE_GUARD));
 		result.executable = (mbi32->Protect & (PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY)) > 0;
 		result.size = mbi.RegionSize;
@@ -169,7 +172,7 @@ bool memory_strings::_process_all_memory(HANDLE ph, string process_name)
 					long_name << process_name << ":" << module_name_long << "@0x" << std::hex << mbi_info.base;
 					std::stringstream short_name;
 					short_name << process_name << ":" << module_name_short << "@0x" << std::hex << mbi_info.base;
-					m_parser->parse_block( buffer, num_read, short_name.str(), long_name.str(), mbi_info.base );
+					m_parser->parse_block( buffer, num_read, short_name.str(), long_name.str(), mbi_info.base, mbi_info.type );
 				}
 
 				// Cleanup

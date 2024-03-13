@@ -3,7 +3,7 @@
 
 using namespace nlohmann;
 
-bool string_parser::parse_block(unsigned char* buffer, unsigned int buffer_length, string name_short, string name_long, unsigned long long base_address)
+bool string_parser::parse_block(unsigned char* buffer, unsigned int buffer_length, string name_short, string name_long, unsigned long long base_address, DWORD page_type)
 {
 	if( buffer != NULL && buffer_length > 0)
 	{
@@ -17,6 +17,7 @@ bool string_parser::parse_block(unsigned char* buffer, unsigned int buffer_lengt
 			json j;
 			j["name_short"] = name_short;
 			j["name_long"] = name_long;
+			j["page_type"] = page_type;
 			for (int i = 0; i < r_vect.size(); i++)
 			{
 				j["strings"][i]["string"] = std::get<0>(r_vect[i]);
@@ -41,6 +42,23 @@ bool string_parser::parse_block(unsigned char* buffer, unsigned int buffer_lengt
 
 					if (m_options.print_filename)
 						this->m_printer->add_string(name_short + ",");
+
+					if (m_options.print_page_type)
+					{
+						switch (page_type)
+						{
+						case MEM_IMAGE:
+							this->m_printer->add_string("IMAGE,");
+							break;
+						case MEM_MAPPED:
+							this->m_printer->add_string("MAPPED,");
+							break;
+						case MEM_PRIVATE:
+							this->m_printer->add_string("PRIVATE,");
+							break;
+						default: /* should be impossible, but ignore */ break;
+						}
+					}
 
 					if (m_options.print_string_type)
 						this->m_printer->add_string(std::get<1>(r_vect[i]) + ",");
@@ -128,9 +146,9 @@ bool string_parser::parse_stream(FILE* fh, string name_short, string name_long)
 			{
 				// We have read in the full contents now, lets process it.
 				if( offset > 0 )
-					this->parse_block( buffer, num_read, name_short, name_long + ":offset=" + to_string(offset), 0);
+					this->parse_block( buffer, num_read, name_short, name_long + ":offset=" + to_string(offset), 0, 0);
 				else
-					this->parse_block(buffer, num_read, name_short, name_long, 0);
+					this->parse_block(buffer, num_read, name_short, name_long, 0, 0);
 
 				offset += num_read;
 			}

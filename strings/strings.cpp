@@ -186,6 +186,8 @@ int _tmain(int argc, _TCHAR* argv[])
 			flag_recursive = true;
 		else if (lstrcmp(argv[i], L"-t") == 0)
 			options.print_string_type = true;
+		else if (lstrcmp(argv[i], L"-pt") == 0)
+			options.print_page_type = true;
 		else if (lstrcmp(argv[i], L"-s") == 0)
 			options.print_span = true;
 		else if (lstrcmp(argv[i], L"-e") == 0)
@@ -325,6 +327,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		printf(" -F\n\tPrints the full path and filename for each string.\n");
 		printf(" -s\n\tPrints the file offset or memory address span\n\tof each string.\n");
 		printf(" -t\n\tPrints the string type for each string. UTF8,\n\tor WIDE_STRING.\n");
+		printf(" -pt\n\tPrints the virtual page type for each string.\n\tIMAGE, MAPPED, or PRIVATE.\n");
 		printf(" -wide\n\tPrints only WIDE_STRING strings that are encoded\n\tas two bytes per character.\n");
 		printf(" -utf\n\tPrints only UTF8 encoded strings.\n");
 		printf(" -a\n\tPrints both interesting and not interesting strings.\n\tDefault only prints interesting non-junk strings.\n");

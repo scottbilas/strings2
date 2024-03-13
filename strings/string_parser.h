@@ -21,6 +21,7 @@ struct STRING_OPTIONS
 	bool print_not_interesting = false;
 	bool print_filename = false;
 	bool print_filepath = false;
+	bool print_page_type = false;
 	bool print_span = false;
 	bool print_json = false;
 	bool escape_new_lines = false;
@@ -50,7 +51,7 @@ class string_parser
 	
 public:
 	string_parser( STRING_OPTIONS options );
-	bool parse_block( unsigned char* buffer, unsigned int buffer_length, string name_short, string name_long, unsigned long long base_address);
+	bool parse_block( unsigned char* buffer, unsigned int buffer_length, string name_short, string name_long, unsigned long long base_address, DWORD page_type);
 	bool parse_stream( FILE* fh, string name_short, string name_long);
 	~string_parser(void);
 };
