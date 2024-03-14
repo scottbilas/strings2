@@ -60,7 +60,7 @@ bool memory_strings::dump_process(DWORD pid)
 			CloseHandle(hSnapshot);
 			
 			// Walk through the process regions, extracting the strings
-			bool result = this->_process_all_memory(ph, process_name);
+			bool result = this->_process_all_memory(ph, pid, process_name);
 
 			return result;
 		}else{
@@ -120,7 +120,7 @@ MBI_BASIC_INFO memory_strings::_get_mbi_info(unsigned __int64 address, HANDLE ph
 	return result;
 }
 
-bool memory_strings::_process_all_memory(HANDLE ph, string process_name)
+bool memory_strings::_process_all_memory(HANDLE ph, DWORD pid, string process_name)
 {
 	// Set the max address of the target process. Assume it is a 64 bit process.
 	unsigned __int64 max_address = 0xffffffffffffffff; // Not a problem for 32bit targets
@@ -169,9 +169,9 @@ bool memory_strings::_process_all_memory(HANDLE ph, string process_name)
 
 					// Print the strings from this region
 					std::stringstream long_name;
-					long_name << process_name << ":" << module_name_long << "@0x" << std::hex << mbi_info.base;
+					long_name << process_name << "#" << pid << ":" << module_name_long << "@0x" << std::hex << mbi_info.base;
 					std::stringstream short_name;
-					short_name << process_name << ":" << module_name_short << "@0x" << std::hex << mbi_info.base;
+					short_name << process_name << "#" << pid << ":" << module_name_short << "@0x" << std::hex << mbi_info.base;
 					m_parser->parse_block( buffer, num_read, short_name.str(), long_name.str(), mbi_info.base, mbi_info.type );
 				}
 

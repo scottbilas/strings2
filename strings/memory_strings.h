@@ -29,7 +29,7 @@ class memory_strings
 	string_parser* m_parser;
 
 	void _generate_module_list(HANDLE hSnapshot);
-	bool _process_all_memory(HANDLE ph, string process_name);
+	bool _process_all_memory(HANDLE ph, DWORD pid, string process_name);
 	MBI_BASIC_INFO _get_mbi_info(unsigned __int64 address, HANDLE ph);
 public:
 	memory_strings(string_parser* parser);
