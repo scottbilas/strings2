@@ -1,4 +1,5 @@
 .idea
 *.ncb
 *.suo
-x64
+*.pdb
+strings/x64
